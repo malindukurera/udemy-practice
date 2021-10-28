@@ -10,7 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL;
+using DAL.DBContext;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace API
 {
@@ -36,6 +39,8 @@ namespace API
                     config.DefaultApiVersion = new ApiVersion(1, 0);
                     config.AssumeDefaultVersionWhenUnspecified = true;
                 });
+
+            DalDependancy.AllDependancy(services, Configuration);
         }
 
         private void SetUpSwwagger(IServiceCollection services)

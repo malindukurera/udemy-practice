@@ -3,40 +3,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Models;
+using DAL.Model;
+using DAL.Repositories;
 
 namespace API.Controllers
 {
     public class DepartmentsController : MainApiController
     {
-        [HttpGet]
-        public IActionResult GetAll()
+        private readonly IDepartmentRepository _departmentRepository;
+
+        public DepartmentsController(IDepartmentRepository departmentRepository)
         {
-            return Ok(DepartmentStatic.GetAll());
+            _departmentRepository = departmentRepository;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await _departmentRepository.GetAllAsync());
         }
 
         [HttpGet("{code}")]
-        public IActionResult Get(string code)
+        public async Task<IActionResult> Get(string code)
         {
-            return Ok(DepartmentStatic.GetByCode(code));
+            return Ok(await _departmentRepository.GetByAsync(code));
         }
 
         [HttpPost]
-        public IActionResult Insert(Department department)
+        public async Task<IActionResult> Insert(Department department)
         {
-            return Ok(DepartmentStatic.Insert(department));
+            return Ok(await _departmentRepository.AddAsync(department));
         }
 
         [HttpPut("{code}")]
-        public IActionResult Update(string code, Department department)
+        public async Task<IActionResult> Update(string code, Department department)
         {
-            return Ok(DepartmentStatic.Update(code, department));
+            return Ok(await _departmentRepository.UpdateAsync(code, department));
         }
 
         [HttpDelete("{code}")]
-        public IActionResult Delete(string code)
+        public async Task<IActionResult> Delete(string code)
         {
-            return Ok(DepartmentStatic.Delete(code));
+            return Ok(await _departmentRepository.DeleteAsync(code));
         }
     }
 
