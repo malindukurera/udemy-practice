@@ -20,6 +20,7 @@ namespace DAL
             // repository dependancy
 
             services.AddTransient<IDepartmentRepository, DepartmentRepository>();
+            services.AddTransient<IStudentRepository, StudentRepository>();
         }
     }
 }

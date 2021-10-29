@@ -4,41 +4,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DAL.Model;
+using DAL.Repositories;
 
 namespace API.Controllers
 {
     
     public class StudentsController : MainApiController
     {
+        private readonly IStudentRepository _studentRepository;
+
+        public StudentsController(IStudentRepository studentRepository)
+        {
+            _studentRepository = studentRepository;
+        }
+
         [HttpGet]
-        public IActionResult GetAll([FromQuery] string rollNumber, 
+        public async Task<IActionResult> GetAll([FromQuery] string rollNumber, 
             [FromQuery] string nickName)
         {
-            return Ok(StudentStatic.GetAll());
+            return Ok(await _studentRepository.GetAllAsync());
         }
 
         [HttpGet("{code}")]
-        public IActionResult Get(string code)
+        public async Task<IActionResult> Get(string code)
         {
-            return Ok(StudentStatic.GetByCode(code));
+            return Ok(await _studentRepository.GetByAsync(code));
         }
 
         [HttpPost]
-        public IActionResult Insert([FromForm] Student student)
+        public async Task<IActionResult> Insert([FromForm] Student student)
         {
-            return Ok(StudentStatic.Insert(student));
+            return Ok(await _studentRepository.AddAsync(student));
         }
 
         [HttpPut("{code}")]
-        public IActionResult Update(string code, Student student)
+        public async Task<IActionResult> Update(string code, Student student)
         {
-            return Ok(StudentStatic.Update(code, student));
+            return Ok(await _studentRepository.UpdateAsync(code, student));
         }
 
         [HttpDelete("{code}")]
-        public IActionResult Delete(string code)
+        public async Task<IActionResult> Delete(string code)
         {
-            return Ok(StudentStatic.Delete(code));
+            return Ok(await _studentRepository.DeleteAsync(code));
         }
     }
 
