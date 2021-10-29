@@ -5,48 +5,49 @@ using System.Linq;
 using System.Threading.Tasks;
 using DAL.Model;
 using DAL.Repositories;
+using BLL.Services;
 
 namespace API.Controllers
 {
     
     public class StudentsController : MainApiController
     {
-        private readonly IStudentRepository _studentRepository;
+        private readonly IStudentService _studentService;
 
-        public StudentsController(IStudentRepository studentRepository)
+        public StudentsController(IStudentService studentService)
         {
-            _studentRepository = studentRepository;
+            _studentService = studentService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string rollNumber, 
             [FromQuery] string nickName)
         {
-            return Ok(await _studentRepository.GetAllAsync());
+            return Ok(await _studentService.GetAllAsync());
         }
 
         [HttpGet("{code}")]
         public async Task<IActionResult> Get(string code)
         {
-            return Ok(await _studentRepository.GetByAsync(code));
+            return Ok(await _studentService.GetByAsync(code));
         }
 
         [HttpPost]
         public async Task<IActionResult> Insert([FromForm] Student student)
         {
-            return Ok(await _studentRepository.AddAsync(student));
+            return Ok(await _studentService.AddAsync(student));
         }
 
         [HttpPut("{code}")]
         public async Task<IActionResult> Update(string code, Student student)
         {
-            return Ok(await _studentRepository.UpdateAsync(code, student));
+            return Ok(await _studentService.UpdateAsync(code, student));
         }
 
         [HttpDelete("{code}")]
         public async Task<IActionResult> Delete(string code)
         {
-            return Ok(await _studentRepository.DeleteAsync(code));
+            return Ok(await _studentService.DeleteAsync(code));
         }
     }
 

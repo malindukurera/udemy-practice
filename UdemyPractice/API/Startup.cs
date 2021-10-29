@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL;
 using DAL;
 using DAL.DBContext;
 using Microsoft.OpenApi.Models;
@@ -40,7 +41,7 @@ namespace API
                     config.AssumeDefaultVersionWhenUnspecified = true;
                 });
 
-            DalDependancy.AllDependancy(services, Configuration);
+            BllDependancy.AllDependancy(services, Configuration);
         }
 
         private void SetUpSwwagger(IServiceCollection services)

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.Services;
 using DAL.Model;
 using DAL.Repositories;
 
@@ -10,41 +11,41 @@ namespace API.Controllers
 {
     public class DepartmentsController : MainApiController
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IDepartmentService _departmentService;
 
-        public DepartmentsController(IDepartmentRepository departmentRepository)
+        public DepartmentsController(IDepartmentService departmentService)
         {
-            _departmentRepository = departmentRepository;
+            _departmentService = departmentService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _departmentRepository.GetAllAsync());
+            return Ok(await _departmentService.GetAllAsync());
         }
 
         [HttpGet("{code}")]
         public async Task<IActionResult> Get(string code)
         {
-            return Ok(await _departmentRepository.GetByAsync(code));
+            return Ok(await _departmentService.GetByAsync(code));
         }
 
         [HttpPost]
         public async Task<IActionResult> Insert(Department department)
         {
-            return Ok(await _departmentRepository.AddAsync(department));
+            return Ok(await _departmentService.AddAsync(department));
         }
 
         [HttpPut("{code}")]
         public async Task<IActionResult> Update(string code, Department department)
         {
-            return Ok(await _departmentRepository.UpdateAsync(code, department));
+            return Ok(await _departmentService.UpdateAsync(code, department));
         }
 
         [HttpDelete("{code}")]
         public async Task<IActionResult> Delete(string code)
         {
-            return Ok(await _departmentRepository.DeleteAsync(code));
+            return Ok(await _departmentService.DeleteAsync(code));
         }
     }
 
