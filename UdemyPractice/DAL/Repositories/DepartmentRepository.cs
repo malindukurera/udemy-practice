@@ -51,5 +51,15 @@ namespace DAL.Repositories
 
             return department;
         }
+
+        public async Task<object> FindByCode(string code)
+        {
+            return await _context.Departments.FirstOrDefaultAsync(x => x.Code == code);
+        }
+
+        public async Task<object> FindByName(string name)
+        {
+            return await _context.Departments.FirstOrDefaultAsync(x => x.Name == name);
+        }
     }
 }

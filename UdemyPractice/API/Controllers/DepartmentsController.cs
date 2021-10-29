@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.Request;
 using BLL.Services;
 using DAL.Model;
 using DAL.Repositories;
@@ -31,13 +32,13 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Insert(Department department)
+        public async Task<IActionResult> Insert(DepartmentInsertRequestViewModel department)
         {
             return Ok(await _departmentService.AddAsync(department));
         }
 
         [HttpPut("{code}")]
-        public async Task<IActionResult> Update(string code, Department department)
+        public async Task<IActionResult> Update(string code, DepartmentInsertRequestViewModel department)
         {
             return Ok(await _departmentService.UpdateAsync(code, department));
         }

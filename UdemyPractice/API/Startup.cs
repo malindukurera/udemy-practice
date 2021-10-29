@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using BLL;
 using DAL;
 using DAL.DBContext;
+using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,7 +31,7 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
 
             SetUpSwwagger(services);
 

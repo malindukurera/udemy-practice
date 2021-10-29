@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using BLL.Request;
 using DAL.Model;
 
 namespace BLL.Services
@@ -10,8 +11,10 @@ namespace BLL.Services
     {
         Task<List<Department>> GetAllAsync();
         Task<Department> GetByAsync(string code);
-        Task<Department> AddAsync(Department department);
-        Task<Department> UpdateAsync(string code, Department department);
+        Task<Department> AddAsync(DepartmentInsertRequestViewModel department);
+        Task<Department> UpdateAsync(string code, DepartmentInsertRequestViewModel department);
         Task<Department> DeleteAsync(string code);
+        Task<bool> IsCodeExists(string code);
+        Task<bool> IsNameExists(string name);
     }
 }
