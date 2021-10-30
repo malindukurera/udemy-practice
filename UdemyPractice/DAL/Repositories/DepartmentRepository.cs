@@ -27,12 +27,10 @@ namespace DAL.Repositories
             return await _context.Departments.ToListAsync();
         }
 
-        public async Task<Department> DeleteAsync(string code)
+        public async Task<bool> DeleteAsync(Department department)
         {
-            var department = await _context.Departments.FirstOrDefaultAsync(x => x.Code == code);
             _context.Departments.Remove(department);
-            await _context.SaveChangesAsync();
-            return department;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<Department> GetByAsync(string code)
@@ -41,23 +39,18 @@ namespace DAL.Repositories
             return department;
         }
 
-        public async Task<Department> UpdateAsync(string code, Department department)
+        public async Task<bool> UpdateAsync(Department department)
         {
-            var dept = await _context.Departments.FirstOrDefaultAsync(x => x.Code == code);
-
-            dept.Name = department.Name;
-            _context.Departments.Update(dept);
-            await _context.SaveChangesAsync();
-
-            return department;
+            _context.Departments.Update(department);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<object> FindByCode(string code)
+        public async Task<Department> FindByCode(string code)
         {
             return await _context.Departments.FirstOrDefaultAsync(x => x.Code == code);
         }
 
-        public async Task<object> FindByName(string name)
+        public async Task<Department> FindByName(string name)
         {
             return await _context.Departments.FirstOrDefaultAsync(x => x.Name == name);
         }

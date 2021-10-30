@@ -8,10 +8,10 @@ namespace DAL.Repositories
     {
         Task<Department> AddAsync(Department department);
         Task<List<Department>> GetAllAsync();
-        Task<Department> DeleteAsync(string code);
+        Task<bool> DeleteAsync(Department department);
         Task<Department> GetByAsync(string code);
-        Task<Department> UpdateAsync(string code, Department department);
-        Task<object> FindByCode(string code);
-        Task<object> FindByName(string name);
+        Task<bool> UpdateAsync(Department department);
+        Task<Department> FindByCode(string code);
+        Task<Department> FindByName(string name);
     }
 }
