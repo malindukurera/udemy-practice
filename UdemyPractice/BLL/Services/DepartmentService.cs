@@ -20,12 +20,12 @@ namespace BLL.Services
 
         public async Task<List<Department>> GetAllAsync()
         {
-            return await _departmentRepository.GetAllAsync();
+            return await _departmentRepository.GetList();
         }
 
         public async Task<Department> GetByAsync(string code)
         {
-            var dept = await _departmentRepository.GetByAsync(code);
+            var dept = await _departmentRepository.FindSingleAsync(x => x.Code == code);
             if (dept == null)
             {
                 throw new ApplicationValidationException("department not found");
@@ -40,12 +40,19 @@ namespace BLL.Services
             department.Code = request.Code;
             department.Name = request.Name;
 
-            return await _departmentRepository.AddAsync(department);
+            await _departmentRepository.CreateAsync(department);
+
+            if (await _departmentRepository.SaveCompletedAsync())
+            {
+                return department;
+            }
+
+            throw new ApplicationValidationException("Error inserting department");
         }
 
         public async Task<Department> UpdateAsync(string code, DepartmentInsertRequestViewModel request)
         {
-            var dept = await _departmentRepository.GetByAsync(code);
+            var dept = await _departmentRepository.FindSingleAsync(x => x.Code == code);
             if (dept == null)
             {
                 throw new ApplicationValidationException("department not found");
@@ -53,7 +60,7 @@ namespace BLL.Services
 
             if (!String.IsNullOrEmpty(request.Code))
             {
-                var existAlreadyCode = await _departmentRepository.FindByCode(request.Code);
+                var existAlreadyCode = await _departmentRepository.FindSingleAsync(x => x.Code == request.Code);
                 if (existAlreadyCode != null)
                 {
                     throw new ApplicationValidationException("Your updated Code already present in our system!");
@@ -64,7 +71,7 @@ namespace BLL.Services
 
             if (!String.IsNullOrEmpty(request.Name))
             {
-                var existAlreadyName = await _departmentRepository.FindByName(request.Name);
+                var existAlreadyName = await _departmentRepository.FindSingleAsync(x => x.Name == request.Name);
                 if (existAlreadyName != null)
                 {
                     throw new ApplicationValidationException("Your updated Name already present in our system!");
@@ -73,7 +80,9 @@ namespace BLL.Services
                 dept.Name = request.Name;
             }
 
-            if (await _departmentRepository.UpdateAsync(dept))
+            _departmentRepository.Update(dept);
+
+            if (await _departmentRepository.SaveCompletedAsync())
             {
                 return dept;
             }
@@ -83,13 +92,15 @@ namespace BLL.Services
 
         public async Task<Department> DeleteAsync(string code)
         {
-            var department = await _departmentRepository.GetByAsync(code);
+            var department = await _departmentRepository.FindSingleAsync(x=>x.Code == code);
             if (department == null)
             {
                 throw new ApplicationValidationException("department not found");
             }
 
-            if (await _departmentRepository.DeleteAsync(department))
+            _departmentRepository.Delete(department);
+
+            if (await _departmentRepository.SaveCompletedAsync())
             {
                 return department;
             }
@@ -99,7 +110,7 @@ namespace BLL.Services
 
         public async Task<bool> IsCodeExists(string code)
         {
-            var dept = await _departmentRepository.FindByCode(code);
+            var dept = await _departmentRepository.FindSingleAsync(x => x.Code == code);
             if (dept == null)
             {
                 return true;
@@ -110,7 +121,7 @@ namespace BLL.Services
 
         public async Task<bool> IsNameExists(string name)
         {
-            var dept = await _departmentRepository.FindByName(name);
+            var dept = await _departmentRepository.FindSingleAsync(x => x.Name == name);
             if (dept == null)
             {
                 return true;

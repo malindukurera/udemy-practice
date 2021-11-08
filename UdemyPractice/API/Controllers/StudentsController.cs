@@ -9,7 +9,6 @@ using BLL.Services;
 
 namespace API.Controllers
 {
-    
     public class StudentsController : MainApiController
     {
         private readonly IStudentService _studentService;
@@ -26,10 +25,10 @@ namespace API.Controllers
             return Ok(await _studentService.GetAllAsync());
         }
 
-        [HttpGet("{code}")]
-        public async Task<IActionResult> Get(string code)
+        [HttpGet("{email}")]
+        public async Task<IActionResult> Get(string email)
         {
-            return Ok(await _studentService.GetByAsync(code));
+            return Ok(await _studentService.GetByAsync(email));
         }
 
         [HttpPost]
@@ -38,16 +37,16 @@ namespace API.Controllers
             return Ok(await _studentService.AddAsync(student));
         }
 
-        [HttpPut("{code}")]
-        public async Task<IActionResult> Update(string code, Student student)
+        [HttpPut("{email}")]
+        public async Task<IActionResult> Update(string email, Student student)
         {
-            return Ok(await _studentService.UpdateAsync(code, student));
+            return Ok(await _studentService.UpdateAsync(email, student));
         }
 
-        [HttpDelete("{code}")]
-        public async Task<IActionResult> Delete(string code)
+        [HttpDelete("{email}")]
+        public async Task<IActionResult> Delete(string email)
         {
-            return Ok(await _studentService.DeleteAsync(code));
+            return Ok(await _studentService.DeleteAsync(email));
         }
     }
 

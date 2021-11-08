@@ -9,9 +9,9 @@ namespace BLL.Services
     public interface IStudentService
     {
         Task<List<Student>> GetAllAsync();
-        Task<Student> GetByAsync(string code);
+        Task<Student> GetByAsync(string email);
         Task<Student> AddAsync(Student student);
-        Task<Student> UpdateAsync(string code, Student student);
-        Task<Student> DeleteAsync(string code);
+        Task<Student> UpdateAsync(string email, Student student);
+        Task<Student> DeleteAsync(string email);
     }
 }

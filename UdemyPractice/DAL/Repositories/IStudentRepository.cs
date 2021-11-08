@@ -6,12 +6,7 @@ using DAL.Model;
 
 namespace DAL.Repositories
 {
-    public interface IStudentRepository
+    public interface IStudentRepository : IRepositoryBase<Student>
     {
-        Task<Student> AddAsync(Student student);
-        Task<List<Student>> GetAllAsync();
-        Task<Student> DeleteAsync(string email);
-        Task<Student> GetByAsync(string email);
-        Task<Student> UpdateAsync(string email, Student student);
     }
 }
