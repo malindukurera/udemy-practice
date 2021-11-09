@@ -15,12 +15,10 @@ namespace DAL
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
             
             // repository dependancy
 
-            services.AddTransient<IDepartmentRepository, DepartmentRepository>();
-            services.AddTransient<IStudentRepository, StudentRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
     }
 }

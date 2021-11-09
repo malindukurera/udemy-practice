@@ -10,21 +10,21 @@ namespace BLL.Services
 {
     public class StudentService : IStudentService
     {
-        private readonly IStudentRepository _studentRepository;
+        private readonly IUnitOfWork _uow;
 
-        public StudentService(IStudentRepository studentRepository)
+        public StudentService(IUnitOfWork _uow)
         {
-            _studentRepository = studentRepository;
+            this._uow = _uow;
         }
 
         public async Task<List<Student>> GetAllAsync()
         {
-            return await _studentRepository.GetList();
+            return await _uow.StudentRepository.GetList();
         }
 
         public async Task<Student> GetByAsync(string email)
         {
-            var dbStudent = await _studentRepository.FindSingleAsync(s => s.Email == email);
+            var dbStudent = await _uow.StudentRepository.FindSingleAsync(s => s.Email == email);
             if (dbStudent == null)
             {
                 throw new ApplicationValidationException("Student not found");
@@ -35,9 +35,8 @@ namespace BLL.Services
 
         public async Task<Student> AddAsync(Student student)
         {
-            await _studentRepository.CreateAsync(student);
-
-            if (await _studentRepository.SaveCompletedAsync())
+            await _uow.StudentRepository.CreateAsync(student);
+            if (await _uow.StudentRepository.SaveCompletedAsync())
             {
                 return student;
             }
@@ -47,16 +46,16 @@ namespace BLL.Services
 
         public async Task<Student> UpdateAsync(string email, Student student)
         {
-            var dbStudent = await _studentRepository.FindSingleAsync(s => s.Email == email);
+            var dbStudent = await _uow.StudentRepository.FindSingleAsync(s => s.Email == email);
             if (dbStudent == null)
             {
                 throw new ApplicationValidationException("Student not found");
             }
 
             dbStudent.Name = student.Name;
-            _studentRepository.Update(dbStudent);
+            _uow.StudentRepository.Update(dbStudent);
 
-            if (await _studentRepository.SaveCompletedAsync())
+            if (await _uow.StudentRepository.SaveCompletedAsync())
             {
                 return dbStudent;
             }
@@ -66,15 +65,15 @@ namespace BLL.Services
 
         public async Task<Student> DeleteAsync(string email)
         {
-            var dbStudent = await _studentRepository.FindSingleAsync(s => s.Email == email);
+            var dbStudent = await _uow.StudentRepository.FindSingleAsync(s => s.Email == email);
             if (dbStudent == null)
             {
                 throw new ApplicationValidationException("Student not found");
             }
 
-            _studentRepository.Delete(dbStudent);
+            _uow.StudentRepository.Delete(dbStudent);
 
-            if (await _studentRepository.SaveCompletedAsync())
+            if (await _uow.StudentRepository.SaveCompletedAsync())
             {
                 return dbStudent;
             }
