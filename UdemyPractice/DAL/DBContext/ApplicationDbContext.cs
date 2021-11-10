@@ -47,6 +47,12 @@ namespace DAL.DBContext
                 }
             }
 
+            modelBuilder.Entity<CourseStudent>().HasKey(cs => new {cs.CourseId, cs.StudentId});
+            modelBuilder.Entity<CourseStudent>().HasOne(cs => cs.Course)
+                .WithMany(cs => cs.CourseStudents).HasForeignKey(cs => cs.CourseId);
+            modelBuilder.Entity<CourseStudent>().HasOne(cs => cs.Student)
+                .WithMany(cs => cs.CourseStudents).HasForeignKey(cs => cs.StudentId);
+
             base.OnModelCreating(modelBuilder);
         }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.Request;
 using DAL.Model;
 using DAL.Repositories;
 using BLL.Services;
@@ -32,9 +33,9 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Insert([FromForm] Student student)
+        public async Task<IActionResult> Insert([FromForm] StudentInsertRequestViewModel studentRequest)
         {
-            return Ok(await _studentService.AddAsync(student));
+            return Ok(await _studentService.AddAsync(studentRequest));
         }
 
         [HttpPut("{email}")]

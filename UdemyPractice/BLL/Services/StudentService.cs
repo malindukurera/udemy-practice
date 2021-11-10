@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using BLL.Request;
 using DAL.Model;
 using DAL.Repositories;
 using Utility.Exceptions;
@@ -33,8 +34,13 @@ namespace BLL.Services
             return dbStudent;
         }
 
-        public async Task<Student> AddAsync(Student student)
+        public async Task<Student> AddAsync(StudentInsertRequestViewModel studentRequest)
         {
+            var student = new Student();
+            student.Name = studentRequest.Name;
+            student.Email = studentRequest.Email;
+            student.DepartmentId = studentRequest.DepartmentId;
+
             await _uow.StudentRepository.CreateAsync(student);
             if (await _uow.StudentRepository.SaveCompletedAsync())
             {
@@ -79,6 +85,14 @@ namespace BLL.Services
             }
 
             throw new ApplicationValidationException("Error deleting the student");
+        }
+
+        public async Task<bool> IsEmailExists(string email)
+        {
+            var stu = await _uow.StudentRepository.FindSingleAsync(s => s.Email == email);
+            if (stu == null)
+                return true;
+            return false;
         }
     }
 }
