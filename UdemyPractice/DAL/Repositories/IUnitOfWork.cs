@@ -9,6 +9,7 @@ namespace DAL.Repositories
     {
         IDepartmentRepository DepartmentRepository { get; }
         IStudentRepository StudentRepository { get; }
+        ICourseRepository CourseRepository { get; }
         Task<bool> SaveChangesAsync();
     }
 }

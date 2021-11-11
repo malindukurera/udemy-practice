@@ -24,6 +24,10 @@ namespace DAL.Repositories
         public IStudentRepository StudentRepository => 
             _studentRepository ?? new StudentRepository(_context);
 
+        private ICourseRepository _courseRepository;
+        public ICourseRepository CourseRepository =>
+            _courseRepository ?? new CourseRepository(_context);
+
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() > 0;
