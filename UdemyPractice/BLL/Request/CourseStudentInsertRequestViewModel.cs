@@ -13,7 +13,7 @@ namespace BLL.Request
     public class CourseStudentInsertRequestViewModel
     {
         public int StudentId { get; set; }
-        public int CourierId { get; set; }
+        public int CourseId { get; set; }
     }
 
     public class CourseStudentInsertRequestViewModelValidator : AbstractValidator<CourseStudentInsertRequestViewModel>
@@ -26,7 +26,7 @@ namespace BLL.Request
 
             RuleFor(x => x.StudentId).NotNull().NotEmpty()
                 .MustAsync(StudentIdExistEx).WithMessage("Student not exist database");
-            RuleFor(x => x.CourierId).NotNull().NotEmpty()
+            RuleFor(x => x.CourseId).NotNull().NotEmpty()
                 .MustAsync(CourseIdExistEx).WithMessage("Course not exist database");
         }
 

@@ -7,6 +7,7 @@ using BLL.Services.Interfaces;
 using DAL.Model;
 using DAL.Repositories;
 using Utility.Exceptions;
+using Utility.Models;
 
 namespace BLL.Services
 {
@@ -24,9 +25,10 @@ namespace BLL.Services
             return await _uow.CourseStudentRepository.GetList();
         }
 
-        public async Task<CourseStudent> GetByAsync(string code)
+        public async Task<CourseStudent> GetByAsync(int courseId, int studentId)
         {
-            var dept = await _uow.CourseStudentRepository.FindSingleAsync(x => x.Code == code);
+            var dept = await _uow.CourseStudentRepository
+                .FindSingleAsync(x => x.CourseId == courseId && x.StudentId == studentId);
             if (dept == null)
             {
                 throw new ApplicationValidationException("courseStudent not found");
@@ -35,99 +37,50 @@ namespace BLL.Services
             return dept;
         }
 
-        public async Task<CourseStudent> AddAsync(CourseStudentInsertRequestViewModel request)
+        public async Task<ApiSuccessResponse> AddAsync(CourseStudentInsertRequestViewModel request)
         {
+            var dept = await _uow.CourseStudentRepository
+                .FindSingleAsync(x => x.CourseId == request.CourseId && x.StudentId == request.StudentId);
+            if (dept != null)
+            {
+                throw new ApplicationValidationException("Student already enrolled to this course");
+            }
+
             var courseStudent = new CourseStudent();
-            courseStudent.Code = request.Code;
-            courseStudent.Name = request.Name;
+            courseStudent.CourseId = request.CourseId;
+            courseStudent.StudentId = request.StudentId;
 
             await _uow.CourseStudentRepository.CreateAsync(courseStudent);
 
             if (await _uow.CourseStudentRepository.SaveCompletedAsync())
             {
-                return courseStudent;
+                return new ApiSuccessResponse()
+                {
+                    Message = "Student enrolled successfully",
+                    StatusCode = 200
+                };
             }
 
             throw new ApplicationValidationException("Error inserting courseStudent");
         }
 
-        public async Task<CourseStudent> UpdateAsync(string code, CourseStudentInsertRequestViewModel request)
+        public async Task<CourseStudent> DeleteAsync(int courseId, int studentId)
         {
-            var dept = await _uow.CourseStudentRepository.FindSingleAsync(x => x.Code == code);
+            var dept = await _uow.CourseStudentRepository
+                .FindSingleAsync(x => x.CourseId == courseId && x.StudentId == studentId);
             if (dept == null)
             {
                 throw new ApplicationValidationException("courseStudent not found");
             }
 
-            if (!String.IsNullOrEmpty(request.Code))
-            {
-                var existAlreadyCode = await _uow.CourseStudentRepository.FindSingleAsync(x => x.Code == request.Code);
-                if (existAlreadyCode != null)
-                {
-                    throw new ApplicationValidationException("Your updated Code already present in our system!");
-                }
+            _uow.CourseStudentRepository.Delete(dept);
 
-                dept.Code = request.Code;
-            }
-
-            if (!String.IsNullOrEmpty(request.Name))
-            {
-                var existAlreadyName = await _uow.CourseStudentRepository.FindSingleAsync(x => x.Name == request.Name);
-                if (existAlreadyName != null)
-                {
-                    throw new ApplicationValidationException("Your updated Name already present in our system!");
-                }
-
-                dept.Name = request.Name;
-            }
-
-            _uow.CourseStudentRepository.Update(dept);
             if (await _uow.CourseStudentRepository.SaveCompletedAsync())
             {
                 return dept;
             }
 
-            throw new ApplicationValidationException("Some problem for update data");
-        }
-
-        public async Task<CourseStudent> DeleteAsync(string code)
-        {
-            var courseStudent = await _uow.CourseStudentRepository.FindSingleAsync(x => x.Code == code);
-            if (courseStudent == null)
-            {
-                throw new ApplicationValidationException("courseStudent not found");
-            }
-
-            _uow.CourseStudentRepository.Delete(courseStudent);
-
-            if (await _uow.CourseStudentRepository.SaveCompletedAsync())
-            {
-                return courseStudent;
-            }
-
             throw new ApplicationValidationException("Some problem for delete data");
-        }
-
-        public async Task<bool> IsCodeExists(string code)
-        {
-            var dept = await _uow.CourseStudentRepository.FindSingleAsync(x => x.Code == code);
-            if (dept == null)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public async Task<bool> IsNameExists(string name)
-        {
-            var dept = await _uow.CourseStudentRepository.FindSingleAsync(x => x.Name == name);
-            if (dept == null)
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }
