@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using DAL.DBContext;
+using DAL.Repositories.Interfaces;
 
 namespace DAL.Repositories
 {
@@ -27,6 +28,10 @@ namespace DAL.Repositories
         private ICourseRepository _courseRepository;
         public ICourseRepository CourseRepository =>
             _courseRepository ?? new CourseRepository(_context);
+
+        private ICourseStudentRepository _courseStudentRepository;
+        public ICourseStudentRepository CourseStudentRepository =>
+            _courseStudentRepository ?? new CourseStudentRepository(_context);
 
         public async Task<bool> SaveChangesAsync()
         {

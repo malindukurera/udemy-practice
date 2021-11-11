@@ -128,5 +128,15 @@ namespace BLL.Services
 
             return false;
         }
+        public async Task<bool> IsIdExists(int id)
+        {
+            var dept = await _uow.CourseRepository.FindSingleAsync(x => x.Id == id);
+            if (dept == null)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

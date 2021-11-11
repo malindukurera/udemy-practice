@@ -15,5 +15,6 @@ namespace BLL.Services
         Task<Student> UpdateAsync(string email, Student student);
         Task<Student> DeleteAsync(string email);
         Task<bool> IsEmailExists(string email);
+        Task<bool> IsIdExists(int id);
     }
 }

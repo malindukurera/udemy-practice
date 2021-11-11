@@ -16,5 +16,6 @@ namespace BLL.Services
         Task<Course> DeleteAsync(string code);
         Task<bool> IsCodeExists(string code);
         Task<bool> IsNameExists(string name);
+        Task<bool> IsIdExists(int id);
     }
 }

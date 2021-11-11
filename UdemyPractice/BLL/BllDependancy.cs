@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using BLL.Request;
 using BLL.Services;
+using BLL.Services.Interfaces;
 using DAL;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,7 @@ namespace BLL
             services.AddTransient<IDepartmentService, DepartmentService>();
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<ICourseService, CourseService>();
+            services.AddTransient<ICourseStudentService, CourseStudentService>();
 
             AllFluentValidationDependancy(services);
         }
@@ -28,6 +30,7 @@ namespace BLL
             services.AddTransient<IValidator<DepartmentInsertRequestViewModel>, DepartmentInsertRequestViewModelValidator>();
             services.AddTransient<IValidator<StudentInsertRequestViewModel>, StudentInsertRequestViewModelValidator>();
             services.AddTransient<IValidator<CourseInsertRequestViewModel>, CourseInsertRequestViewModelValidator>();
+            services.AddTransient<IValidator<CourseStudentInsertRequestViewModel>, CourseStudentInsertRequestViewModelValidator>();
         }
     }
 }
