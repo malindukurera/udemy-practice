@@ -22,5 +22,11 @@ namespace API.Controllers
         {
             return Ok(await _courseStudentService.AddAsync(model));
         }
+
+        [HttpGet("{studentId}")]
+        public async Task<IActionResult> CourseList(int studentId)
+        {
+            return Ok(await _courseStudentService.CourseListAsync(studentId));
+        }
     }
 }

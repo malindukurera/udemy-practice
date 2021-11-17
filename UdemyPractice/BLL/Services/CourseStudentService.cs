@@ -6,6 +6,7 @@ using BLL.Request;
 using BLL.Services.Interfaces;
 using DAL.Model;
 using DAL.Repositories;
+using DAL.ResponseViewModel;
 using Utility.Exceptions;
 using Utility.Models;
 
@@ -81,6 +82,11 @@ namespace BLL.Services
             }
 
             throw new ApplicationValidationException("Some problem for delete data");
+        }
+
+        public async Task<StudentCourseViewModel> CourseListAsync(int studentId)
+        {
+            return await _uow.StudentRepository.GetSpecificStudentCourseListAsync(studentId);
         }
     }
 }
