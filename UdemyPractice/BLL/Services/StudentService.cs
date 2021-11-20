@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BLL.Request;
@@ -18,9 +19,9 @@ namespace BLL.Services
             this._uow = _uow;
         }
 
-        public async Task<List<Student>> GetAllAsync()
+        public IQueryable<Student> Queryable()
         {
-            return await _uow.StudentRepository.GetList();
+            return _uow.StudentRepository.QueryAll();
         }
 
         public async Task<Student> GetByAsync(string email)

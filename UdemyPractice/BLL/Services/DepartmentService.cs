@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BLL.Request;
@@ -18,9 +19,9 @@ namespace BLL.Services
             _uow = unitOfWork;
         }
 
-        public async Task<List<Department>> GetAllAsync()
+        public IQueryable<Department> Queryable()
         {
-            return await _uow.DepartmentRepository.GetList();
+            return _uow.DepartmentRepository.QueryAll();
         }
 
         public async Task<Department> GetByAsync(string code)

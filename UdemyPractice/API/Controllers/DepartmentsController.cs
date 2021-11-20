@@ -7,6 +7,7 @@ using BLL.Request;
 using BLL.Services;
 using DAL.Model;
 using DAL.Repositories;
+using LightQuery.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -19,10 +20,11 @@ namespace API.Controllers
             _departmentService = departmentService;
         }
 
+        [AsyncLightQuery(forcePagination: true, defaultPageSize: 10, defaultSort: "Id desc")]
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
-            return Ok(await _departmentService.GetAllAsync());
+            return Ok(_departmentService.Queryable());
         }
 
         [HttpGet("{code}")]

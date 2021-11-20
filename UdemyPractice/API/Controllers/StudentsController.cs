@@ -7,6 +7,7 @@ using BLL.Request;
 using DAL.Model;
 using DAL.Repositories;
 using BLL.Services;
+using LightQuery.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -18,12 +19,13 @@ namespace API.Controllers
         {
             _studentService = studentService;
         }
-
+        
+        [AsyncLightQuery(forcePagination: true, defaultPageSize: 10, defaultSort: "Id desc")]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string rollNumber, 
+        public IActionResult GetAll([FromQuery] string rollNumber, 
             [FromQuery] string nickName)
         {
-            return Ok(await _studentService.GetAllAsync());
+            return Ok(_studentService.Queryable());
         }
 
         [HttpGet("{email}")]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BLL.Request;
@@ -9,7 +10,7 @@ namespace BLL.Services
 {
     public interface IStudentService
     {
-        Task<List<Student>> GetAllAsync();
+        IQueryable<Student> Queryable();
         Task<Student> GetByAsync(string email);
         Task<Student> AddAsync(StudentInsertRequestViewModel studentRequest);
         Task<Student> UpdateAsync(string email, Student student);
