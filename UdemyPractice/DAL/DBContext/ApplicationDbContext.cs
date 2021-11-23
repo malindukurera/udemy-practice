@@ -8,11 +8,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using DAL.Model;
 using DAL.Model.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.DBContext
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
+        <AppUser, AppRole, int, IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>, 
+            IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         private static MethodInfo _propertyMethod = typeof(EF).GetMethod(
             nameof(EF.Property), BindingFlags.Static | BindingFlags.Public)?
@@ -54,6 +58,18 @@ namespace DAL.DBContext
                 .WithMany(cs => cs.CourseStudents).HasForeignKey(cs => cs.CourseId);
             modelBuilder.Entity<CourseStudent>().HasOne(cs => cs.Student)
                 .WithMany(cs => cs.CourseStudents).HasForeignKey(cs => cs.StudentId);
+
+            modelBuilder.Entity<AppUser>(b =>
+            {
+                b.HasMany(e => e.AppUserRoles).WithOne(e => e.AppUser)
+                    .HasForeignKey(ur => ur.UserId).IsRequired();
+            });
+
+            modelBuilder.Entity<AppRole>(b =>
+            {
+                b.HasMany(e => e.AppUserRoles).WithOne(e => e.AppRole)
+                    .HasForeignKey(ur => ur.RoleId).IsRequired();
+            });
 
             base.OnModelCreating(modelBuilder);
         }

@@ -14,7 +14,9 @@ using API.Middleware;
 using BLL;
 using DAL;
 using DAL.DBContext;
+using DAL.Model;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -45,7 +47,14 @@ namespace API
                     config.AssumeDefaultVersionWhenUnspecified = true;
                 });
 
+            IdentitySetUp(services);
+
             BllDependancy.AllDependancy(services, Configuration);
+        }
+
+        private void IdentitySetUp(IServiceCollection services)
+        {
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<ApplicationDbContext>();
         }
 
         private void SetUpSwwagger(IServiceCollection services)

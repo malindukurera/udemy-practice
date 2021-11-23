@@ -19,7 +19,11 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //await _service.DummyData2();
+            await _service.DummyData1();
+            await _service.DummyData2();
+            await _service.AddNewRoles();
+            await _service.AddNewUser();
+
             return Ok("Hello world");
         }
     }

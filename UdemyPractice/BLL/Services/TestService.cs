@@ -8,6 +8,7 @@ using Bogus.Extensions;
 using DAL.DBContext;
 using DAL.Model;
 using DAL.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
@@ -17,17 +18,24 @@ namespace BLL.Services
         Task InsertData();
         Task DummyData1();
         Task DummyData2();
+        Task AddNewRoles();
+        Task AddNewUser();
     }
 
     public class TestService : ITestService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ApplicationDbContext _context;
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public TestService(IUnitOfWork unitOfWork, ApplicationDbContext context)
+        public TestService(IUnitOfWork unitOfWork, ApplicationDbContext context, 
+            RoleManager<AppRole> roleManager, UserManager<AppUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _context = context;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         public async Task InsertData()
@@ -102,6 +110,60 @@ namespace BLL.Services
                 await _context.SaveChangesAsync();
 
                 count += 5;
+            }
+        }
+
+        public async Task AddNewRoles()
+        {
+            var roleList = new List<string>()
+            {
+                "admin",
+                "manager",
+                "supervisor"
+            };
+
+            foreach (var role in roleList)
+            {
+                var existingRole = await _roleManager.FindByNameAsync(role);
+                if (existingRole == null)
+                {
+                    await _roleManager.CreateAsync(new AppRole()
+                    {
+                        Name = role
+                    });
+                }
+            }
+        }
+
+        public async Task AddNewUser()
+        {
+            var userList = new List<AppUser>()
+            {
+                new AppUser()
+                {
+                    UserName = "sunil@gmail.com",
+                    Email = "sunil@gmail.com",
+                    FullName = "Sunil Perera",
+                },
+                new AppUser()
+                {
+                    UserName = "nimal@gmail.com",
+                    Email = "nimal@gmail.com",
+                    FullName = "Nimal Fernando",
+                }
+            };
+
+            foreach (var user in userList)
+            {
+                var existingUser = await _userManager.FindByEmailAsync(user.Email);
+                if (existingUser == null)
+                {
+                    var inserted = await _userManager.CreateAsync(user, "abc1234$..A!");
+                    if (inserted.Succeeded)
+                    {
+                        await _userManager.AddToRoleAsync(user, "admin");  
+                    }
+                }
             }
         }
     }
