@@ -22,6 +22,7 @@ namespace BLL
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ICourseStudentService, CourseStudentService>();
             services.AddTransient<ITestService, TestService>();
+            services.AddTransient<ITransactionService, TransactionService>();
 
             AllFluentValidationDependancy(services);
         }

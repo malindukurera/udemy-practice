@@ -12,6 +12,8 @@ namespace DAL.Repositories
         IStudentRepository StudentRepository { get; }
         ICourseRepository CourseRepository { get; }
         ICourseStudentRepository CourseStudentRepository { get; }
+        ITransactionHistoryRepository TransactionHistoryRepository { get; }
+        ICustomerBalanceRepository CustomerBalanceRepository { get; }
         Task<bool> SaveChangesAsync();
     }
 }

@@ -33,6 +33,14 @@ namespace DAL.Repositories
         public ICourseStudentRepository CourseStudentRepository =>
             _courseStudentRepository ?? new CourseStudentRepository(_context);
 
+        private ICustomerBalanceRepository _customerBalanceRepository;
+        public ICustomerBalanceRepository CustomerBalanceRepository =>
+            _customerBalanceRepository ?? new CustomerBalanceRepository(_context);
+
+        private ITransactionHistoryRepository _transactionHistoryRepository;
+        public ITransactionHistoryRepository TransactionHistoryRepository =>
+            _transactionHistoryRepository ?? new TransactionHistoryRepository(_context);
+
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() > 0;

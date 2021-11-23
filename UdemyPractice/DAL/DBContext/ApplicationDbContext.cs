@@ -33,6 +33,13 @@ namespace DAL.DBContext
         public DbSet<Course> Courses { get; set; }
         public DbSet<CourseStudent> CourseStudents { get; set; }
 
+        // for concurrency example
+
+        public DbSet<CustomerBalance> CustomerBalances { get; set; }
+        public DbSet<TransactionHistory> TransactionHistories { get; set; }
+
+        // end concurrency example
+
         private static LambdaExpression GetIsDeleteRestriction(Type type)
         {
             var param = Expression.Parameter(type, "it");
@@ -44,6 +51,8 @@ namespace DAL.DBContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CustomerBalance>().Property(c => c.RowVersion).IsConcurrencyToken();
+
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(ISoftDeletable).IsAssignableFrom(entity.ClrType))
