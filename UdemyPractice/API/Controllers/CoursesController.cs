@@ -32,7 +32,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Insert(CourseInsertRequestViewModel course)
+        public async Task<IActionResult> Insert([FromForm] CourseInsertRequestViewModel course)
         {
             return Ok(await _courseService.AddAsync(course));
         }

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BLL.Services;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BLL.Request
@@ -14,6 +15,7 @@ namespace BLL.Request
         public string Name { get; set; }
         public string Code { get; set; }
         public decimal Credit { get; set; }
+        public IFormFile CourseImage { get; set; }
     }
 
     public class CourseInsertRequestViewModelValidator : AbstractValidator<CourseInsertRequestViewModel>

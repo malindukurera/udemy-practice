@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BLL.Helpers;
 using BLL.Request;
 using BLL.Services;
 using BLL.Services.Interfaces;
@@ -23,6 +24,7 @@ namespace BLL
             services.AddTransient<ICourseStudentService, CourseStudentService>();
             services.AddTransient<ITestService, TestService>();
             services.AddTransient<ITransactionService, TransactionService>();
+            services.AddTransient<IFileValidate, FileValidate>();
 
             AllFluentValidationDependancy(services);
         }
